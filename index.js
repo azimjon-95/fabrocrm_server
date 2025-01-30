@@ -16,6 +16,10 @@ const corsOptions = {
     credentials: true, // Agar cookie yoki boshqa autentifikatsiya kerak bo'lsa
 };
 
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+});
+
 app.use(cors(corsOptions));
 
 mongoose.connect(process.env.MONGO_URI)
