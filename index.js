@@ -10,10 +10,10 @@ app.use(express.json());
 
 // CORS optimallashtirilgan sozlamalar
 const corsOptions = {
-    origin: process.env.CORS_ORIGIN || "*", // Kerakli domenni mana shunday belgilang
+    origin: "*", // Kerakli domenni mana shunday belgilang
     methods: ["GET", "POST", "PUT", "DELETE"], // Faollashtirilgan metodlar
     // allowedHeaders: ["Content-Type", "Authorization"], // Kerakli sarlavhalarni qo'shish
-    credentials: true, // Agar cookie yoki boshqa autentifikatsiya kerak bo'lsa
+    // credentials: true, // Agar cookie yoki boshqa autentifikatsiya kerak bo'lsa
 };
 
 
