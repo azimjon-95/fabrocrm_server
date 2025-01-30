@@ -12,19 +12,20 @@ app.use(express.json());
 const corsOptions = {
     origin: process.env.CORS_ORIGIN || "*", // Kerakli domenni mana shunday belgilang
     methods: ["GET", "POST", "PUT", "DELETE"], // Faollashtirilgan metodlar
-    allowedHeaders: ["Content-Type", "Authorization"], // Kerakli sarlavhalarni qo'shish
+    // allowedHeaders: ["Content-Type", "Authorization"], // Kerakli sarlavhalarni qo'shish
     credentials: true, // Agar cookie yoki boshqa autentifikatsiya kerak bo'lsa
 };
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-});
 
 app.use(cors(corsOptions));
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDBga ulanish muvaffaqiyatli!"))
     .catch((err) => console.log("MongoDB ulanish xatosi:", err));
+
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+});
 
 app.use("/api", authRoutes);
 
