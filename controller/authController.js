@@ -4,6 +4,16 @@ const User = require("../model/User");
 
 const generateToken = (user) => jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
+//  **Get**
+exports.getUsers = async (req, res) => {
+    try {
+        const users = await User.find().select("-password");
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching users" });
+    }
+};
+
 // **Ro‘yxatdan o‘tish**
 exports.register = async (req, res) => {
     console.log(req.body);
