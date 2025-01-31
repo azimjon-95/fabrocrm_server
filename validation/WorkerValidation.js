@@ -14,9 +14,14 @@ const workerValidation = (req, res, next) => {
       dayOfBirth: { type: "string", format: "date" },
       phone: { type: "string", minLength: 9, maxLength: 9 },
       address: { type: "string" },
-      img: { type: "string", format: "url" },
+      idNumber: {
+        type: "string",
+        minLength: 9,
+        maxLength: 9,
+        pattern: "^[a-zA-Z]{2}[0-9]{7}$",
+      },
     },
-    required: ["firstName", "lastName", "dayOfBirth", "phone"],
+    required: ["firstName", "lastName", "dayOfBirth", "phone", "idNumber"],
     additionalProperties: false,
     errorMessage: {
       required: {
@@ -24,17 +29,20 @@ const workerValidation = (req, res, next) => {
         lastName: "Familiya kiritish shart",
         dayOfBirth: "Tug‘ilgan sana kiritish shart",
         phone: "Telefon raqam kiritish shart, masalan: 939119572",
+        idNumber: "ID raqam kiritish shart, masalan: AD1234567",
       },
       properties: {
         firstName: "Ism noto‘g‘ri formatda",
         lastName: "Familiya noto‘g‘ri formatda",
         dayOfBirth: "Tug‘ilgan sana noto‘g‘ri formatda, (masalan: 2000-01-01)",
         phone: "Telefon raqam noto‘g‘ri formatda, masalan: 939119572",
+        idNumber: "ID raqam noto‘g‘ri formatda, masalan: AD1234567",
       },
     },
   };
   const validate = ajv.compile(schema);
-  const result = validate(req.body);
+  let data = JSON.parse(JSON.stringify(req.body));
+  const result = validate(data);
   if (!result) {
     return response.error(
       res,

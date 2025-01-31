@@ -9,6 +9,7 @@ const workersModel = new mongoose.Schema(
     dayOfBirth: { type: String },
     phone: { type: String, required: true, unique: true },
     img: { type: String },
+    idNumber: { type: String, required: true },
   },
   { timestamps: true }
 );
