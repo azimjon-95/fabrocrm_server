@@ -1,33 +1,29 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
+const { connect } = require("mongoose");
 const cors = require("cors");
 
-const authRoutes = require("./routes/auth");
+const router = require("./routes/router");
 
 const app = express();
 app.use(express.json());
 
-// CORS optimallashtirilgan sozlamalar
 const corsOptions = {
-    origin: "*", // Kerakli domenni mana shunday belgilang
-    methods: ["GET", "POST", "PUT", "DELETE"], // Faollashtirilgan metodlar
-    // allowedHeaders: ["Content-Type", "Authorization"], // Kerakli sarlavhalarni qo'shish
-    // credentials: true, // Agar cookie yoki boshqa autentifikatsiya kerak bo'lsa
+  origin: ["http://localhost:3000", "http://localhost:3001"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
-
 
 app.use(cors(corsOptions));
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDBga ulanish muvaffaqiyatli!"))
-    .catch((err) => console.log("MongoDB ulanish xatosi:", err));
+connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDBga ulanish muvaffaqiyatli! ✅✅✅"))
+  .catch((err) => console.log("MongoDB ulanish xatosi:,🛑🛑🛑", err));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-});
+app.get("/", (req, res) => res.send("Salom dunyo"));
 
-app.use("/api", authRoutes);
+app.use("/api", router);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server ${PORT}-portda ishlayapti!`));
+app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
