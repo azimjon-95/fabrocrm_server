@@ -1,27 +1,29 @@
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
+const ResponseHandler = require("../utils/responseHandler"); // ResponseHandler-ni import qilish
 
-const generateToken = (user) => jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
+// **Token yaratish funksiyasi**
+const generateToken = (user) => jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+);
 
-//  **Get**
+// **Foydalanuvchilarni olish**
 exports.getUsers = async (req, res) => {
     try {
         const users = await User.find().select("-password");
-        res.json({
-            status: "success",
-            data: users
-        });
+        ResponseHandler.success(res, "usersList", users);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching users" });
+        ResponseHandler.error(res, "fetchError", ResponseHandler.statusCodes.serverError);
     }
 };
 
 // **Ro‘yxatdan o‘tish**
 exports.register = async (req, res) => {
-    console.log(req.body);
     try {
-        const { phone, password } = req.body;
+        const { phone, password, firstName, lastName, dayOfBirth, role, salary } = req.body;
 
         // Telefon raqamidan + ni olib tashlash
         const formattedPhone = phone.replace(/^\+/, "");
@@ -29,37 +31,35 @@ exports.register = async (req, res) => {
         // Telefon raqami mavjudligini tekshirish
         const existingUser = await User.findOne({ phone: formattedPhone });
         if (existingUser) {
-            return res.status(400).json({ error: "Bu telefon raqami allaqachon ro‘yxatdan o‘tgan" });
+            return ResponseHandler.error(res, "userExists");
         }
 
         // Parolni shifrlash
-        const salt = crypto.randomBytes(16).toString("hex"); // Salt yaratish
+        const salt = crypto.randomBytes(16).toString("hex");
         const hashedPassword = crypto
             .createHmac("sha256", salt)
             .update(password)
-            .digest("hex"); // Parolni shifrlash
+            .digest("hex");
 
-        const myData = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            dayOfBirth: req.body.dayOfBirth,
-            role: req.body.role,
+        const newUser = new User({
+            firstName,
+            lastName,
+            dayOfBirth,
+            role,
             phone: formattedPhone,
-            salary: req.body.salary,
-            password: `${salt}:${hashedPassword}`, // Salt va shifrlangan parolni saqlaymiz
-        };
+            salary,
+            password: `${salt}:${hashedPassword}`,
+        });
 
-        // Yangi foydalanuvchini yaratish
-        const user = new User(myData);
-        await user.save();
+        await newUser.save();
 
-        res.status(201).json({ message: "Foydalanuvchi yaratildi" });
+        ResponseHandler.created(res, "userCreated");
     } catch (error) {
-        res.status(400).json({ error: "Foydalanuvchi yaratishda xatolik" });
+        ResponseHandler.error(res, "userCreateError", ResponseHandler.statusCodes.serverError);
     }
 };
-// **Tizimga kirish**
 
+// **Tizimga kirish**
 exports.login = async (req, res) => {
     try {
         const { phone, password } = req.body;
@@ -69,28 +69,25 @@ exports.login = async (req, res) => {
 
         const user = await User.findOne({ phone: formattedPhone });
         if (!user) {
-            return res.status(401).json({ error: "Telefon raqam yoki parol noto‘g‘ri" });
+            return ResponseHandler.error(res, "loginError", ResponseHandler.statusCodes.unauthorized);
         }
 
-        // Salt va shifrlangan parolni ajratish
-        const [salt, storedHashedPassword] = user.password.split(":");
-
         // Parolni tekshirish
+        const [salt, storedHashedPassword] = user.password.split(":");
         const hashedPassword = crypto
             .createHmac("sha256", salt)
             .update(password)
             .digest("hex");
 
         if (hashedPassword !== storedHashedPassword) {
-            return res.status(401).json({ error: "Telefon raqam yoki parol noto‘g‘ri" });
+            return ResponseHandler.error(res, "loginError", ResponseHandler.statusCodes.unauthorized);
         }
 
         // Token yaratish
         const token = generateToken(user);
 
-        // Javobni qaytarish
-        res.json({ token, user });
+        ResponseHandler.success(res, "loginSuccess", { token, user });
     } catch (error) {
-        res.status(500).json({ error: "Kirishda xatolik" });
+        ResponseHandler.error(res, "fetchError", ResponseHandler.statusCodes.serverError);
     }
 };
