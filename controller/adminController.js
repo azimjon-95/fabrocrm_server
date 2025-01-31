@@ -39,7 +39,7 @@ class adminController {
 
       const [salt, storedHashedPassword] = exactAdmin.password.split(":");
       const hashedPassword = crypto
-        .createHmac("sha256", salt)
+        .createHash("sha256", salt)
         .update(password)
         .digest("hex");
 
@@ -62,7 +62,9 @@ class adminController {
         token,
       });
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      console.log(err);
+
+      response.serverError(res, err.message);
     }
   }
 
