@@ -10,7 +10,7 @@ class adminController {
       if (!admins.length) return response.notFound(res, "Adminlar topilmadi");
       response.success(res, "Barcha adminlar", admins);
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, err);
     }
   }
 
@@ -27,7 +27,7 @@ class adminController {
       if (!admin) return response.error(res, "Admin qo'shilmadi", admin);
       response.created(res, "Admin yaratildi", admin);
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, err);
     }
   }
 
@@ -64,7 +64,7 @@ class adminController {
     } catch (err) {
       console.log(err);
 
-      response.serverError(res, err.message);
+      response.serverError(res, err.message, err);
     }
   }
 
@@ -74,7 +74,7 @@ class adminController {
       if (!admin) return response.error(res, "Admin topilmadi", admin);
       response.success(res, "Admin o'chirildi");
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, err);
     }
   }
 
@@ -87,7 +87,7 @@ class adminController {
         return response.error(res, "Admin yangilashda xatolik", admin);
       response.success(res, "Admin yangilandi", admin);
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, "Server xatosi");
     }
   }
 }

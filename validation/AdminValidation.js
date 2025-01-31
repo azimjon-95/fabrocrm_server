@@ -25,7 +25,11 @@ const adminValidation = (req, res, next) => {
         maxLength: 15,
         pattern: "^[a-zA-Z0-9]{6,15}$",
       },
-      role: { type: "string" },
+      role: {
+        type: "string",
+        enum: ["manager", "seller", "director", "accountant"],
+        default: "director",
+      },
     },
     required: [
       "firstName",

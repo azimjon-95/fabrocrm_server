@@ -8,7 +8,7 @@ class WorkerController {
       if (!workers.length) return response.notFound(res, "ishchilar topilmadi");
       response.success(res, "Barcha ishchilar", workers);
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, err);
     }
   }
 
@@ -18,7 +18,7 @@ class WorkerController {
       if (!worker) return response.error(res, "Ishchi qo'shilmadi");
       response.created(res, "Ishchi yaratildi", worker);
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, err);
     }
   }
 
@@ -28,7 +28,7 @@ class WorkerController {
       if (!worker) return response.error(res, "Ishchi o'chirilmadi");
       response.success(res, "Ishchi o'chirildi");
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, err);
     }
   }
 
@@ -44,7 +44,7 @@ class WorkerController {
       if (!worker) return response.error(res, "Ishchi yangilashda xatolik");
       response.success(res, "Ishchi yangilandi", worker);
     } catch (err) {
-      response.serverError(res, "Server xatosi", err);
+      response.serverError(res, err.message, err);
     }
   }
 }
