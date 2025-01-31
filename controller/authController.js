@@ -63,6 +63,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { phone, password } = req.body;
+        console.log(phone, password);
 
         // Telefon raqamidan + ni olib tashlash
         const formattedPhone = phone.replace(/^\+/, "");
