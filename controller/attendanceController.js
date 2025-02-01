@@ -5,6 +5,7 @@ class AttendanceController {
   async create(req, res) {
     try {
       const result = await AttendanceDB.create(req.body);
+
       if (!result) return response.error(res, "Ma'lumot kirishda xatolik");
       return response.success(res, "Saqlandi", result);
     } catch (error) {
