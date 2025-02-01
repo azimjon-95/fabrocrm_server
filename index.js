@@ -7,6 +7,7 @@ const router = require("./routes/router");
 const authMiddleware = require("./middleware/AuthMiddleware");
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const corsOptions = {
