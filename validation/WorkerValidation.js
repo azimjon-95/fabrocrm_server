@@ -20,6 +20,9 @@ const workerValidation = (req, res, next) => {
         maxLength: 9,
         pattern: "^[a-zA-Z]{2}[0-9]{7}$",
       },
+      image: {
+        type: "string",
+      },
     },
     required: ["firstName", "lastName", "dayOfBirth", "phone", "idNumber"],
     additionalProperties: false,
@@ -44,11 +47,7 @@ const workerValidation = (req, res, next) => {
   let data = JSON.parse(JSON.stringify(req.body));
   const result = validate(data);
   if (!result) {
-    return response.error(
-      res,
-      "Tasdiqlashda xatolik",
-      validate.errors[0].message
-    );
+    return response.error(res, validate.errors[0].message);
   }
   next();
 };
