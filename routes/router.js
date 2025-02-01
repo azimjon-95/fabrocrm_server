@@ -19,7 +19,12 @@ router.put("/admin/update/:id", adminController.updateAdmin);
 
 // WORKER
 router.get("/worker/all", workerController.getWorkers);
-router.post("/worker/create", upload.single("image"), workerValidation, workerController.createWorker);
+router.post(
+  "/worker/create",
+  upload.single("image"),
+  workerValidation,
+  workerController.createWorker
+);
 router.delete("/worker/delete/:id", workerController.deleteWorker);
 router.put("/worker/update/:id", workerController.updateWorker);
 
