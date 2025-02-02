@@ -1,8 +1,8 @@
 const response = require("../utils/response");
 const workersDB = require("../model/workersModel");
-// const Multer = require("multer");
 const FormData = require("form-data");
 const axios = require("axios");
+const sharp = require("sharp");
 
 class WorkerController {
   async getWorkers(req, res) {
@@ -22,8 +22,12 @@ class WorkerController {
 
       if (req.file) {
         const formData = new FormData();
+        const processedImage = await sharp(req.file.buffer)
+          .resize({ width: 300, height: 400, fit: "cover" }) // 3x4 format
+          .jpeg({ quality: 90 }) // Sifatni saqlash
+          .toBuffer();
 
-        formData.append("image", req.file.buffer.toString("base64"));
+        formData.append("image", processedImage.toString("base64"));
 
         let api = `${process.env.IMAGE_BB_API_URL}?key=${process.env.IMAGE_BB_API_KEY}`;
         const response = await axios.post(api, formData, {
