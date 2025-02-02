@@ -1,12 +1,46 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const workingHours = new mongoose.Schema(
-  {
-    wages: { type: Number }, // Ish haqqi soat bay
-    workingHours: { type: String }, // Ish vaqti
+// Define the Working Hours Schema
+const workingHours = new Schema({
+  wages: {
+    type: Number,
+    required: true,
+    min: 0, // Prevent negative values
   },
-  { timestamps: true }
-);
+  overtimeWages: {
+    type: Number,
+    required: true,
+    min: 0, // Prevent negative values
+  },
+  workingHours: {
+    type: String,
+    required: true,
+  },
+  voxa: {
+    type: Number,
+    required: true,
+  },
+  toshkent: {
+    type: Number,
+    required: true,
+  },
+  vodiy: {
+    type: Number,
+    required: true,
+  },
 
-const WorkingHours = mongoose.model("workersHours", workingHours);
-module.exports = WorkingHours; 
+  createdAt: {
+    type: Date,
+    default: Date.now, // Automatically set the date when the record is created
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now, // Automatically set the date when the record is updated
+  },
+});
+
+
+const WorkingHours = mongoose.model("WorkingHours", workingHours);
+module.exports = WorkingHours;
+
