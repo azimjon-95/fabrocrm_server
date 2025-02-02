@@ -10,6 +10,8 @@ const workerValidation = require("../validation/WorkerValidation");
 
 const attendanceController = require("../controller/attendanceController");
 
+const WorkingHoursController = require("../controller/workingHoursController");
+
 // ADMIN
 router.get("/admin/all", adminController.getAdmins);
 router.post("/admin/create", adminValidation, adminController.createAdmin);
@@ -34,5 +36,13 @@ router.get("/attendance/date/:date", attendanceController.getByDate);
 router.get("/attendance/monthly/:year/:month", attendanceController.getMonthlyAttendance);
 router.post("/attendance/create", attendanceController.create);
 router.put("/attendance/update/:id", attendanceController.update);
+
+
+// Working Hours
+router.post("/workingHours/create", WorkingHoursController.createWorkingHours);
+router.get("/workingHours/", WorkingHoursController.getAllWorkingHours);
+router.get("/workingHours/:id", WorkingHoursController.getWorkingHoursById);
+router.put("/workingHours/:id", WorkingHoursController.updateWorkingHours);
+router.delete("/workingHours/:id", WorkingHoursController.deleteWorkingHours);
 
 module.exports = router;
