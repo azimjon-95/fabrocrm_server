@@ -51,15 +51,15 @@ class AttendanceController {
   async getMonthlyAttendance(req, res) {
     try {
       const { year, month } = req.params;
-      const startOfMonth = moment(`${year}-${month}-01`)
-        .startOf("month")
-        .toDate();
-      const endOfMonth = moment(startOfMonth).endOf("month").toDate();
+      const startOfMonth = new Date(year, month - 1, 1);
+      const endOfMonth = new Date(year, month, 0, 23, 59, 59);
 
       const result = await AttendanceDB.find({
-        createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-      }).populate("workerId", "fullname");
-      if (!result) return response.notFound(res, "Ma'lumotlar topilmadi");
+        createdAt: { $gte: startOfMonth, $lte: endOfMonth },
+      });
+
+      if (!result.length) return response.notFound(res, "Ma'lumotlar topilmadi");
+
       return response.success(res, "Barcha davomatlar", result);
     } catch (error) {
       return response.error(res, error.message, error);

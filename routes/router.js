@@ -4,11 +4,11 @@ const upload = multer();
 
 const adminController = require("../controller/adminController");
 const adminValidation = require("../validation/AdminValidation");
-
 const workerController = require("../controller/workerController");
 const workerValidation = require("../validation/WorkerValidation");
-
+const salaryController = require("../controller/salaryController");
 const attendanceController = require("../controller/attendanceController");
+const WorkingHoursController = require("../controller/workingHoursController");
 
 const storeController = require("../controller/storeController");
 const storeValidation = require("../validation/StoreValidation");
@@ -48,5 +48,19 @@ router.delete("/store/delete/:id", storeController.deleteStore);
 router.put("/store/update/:id", storeController.updateStore);
 router.get("/store/category/:category", storeController.getStoreByCategory);
 router.put("/store/decrement/:id", storeController.decrementQuantity);
+
+// Working Hours
+router.post("/workingHours/create", WorkingHoursController.createWorkingHours);
+router.get("/workingHours/", WorkingHoursController.getAllWorkingHours);
+router.get("/workingHours/:id", WorkingHoursController.getWorkingHoursById);
+router.put("/workingHours/:id", WorkingHoursController.updateWorkingHours);
+router.delete("/workingHours/:id", WorkingHoursController.deleteWorkingHours);
+
+// Salaries
+router.post("/salaries", salaryController.createSalary);
+router.get("/salaries", salaryController.getAllSalaries);
+router.get("/salaries/:id", salaryController.getSalaryById);
+router.put("/salaries/:id", salaryController.updateSalary);
+router.delete("/salaries/:id", salaryController.deleteSalary);
 
 module.exports = router;
