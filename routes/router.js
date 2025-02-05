@@ -13,6 +13,9 @@ const ExpenseController = require('../controller/expenseController');
 const OrderController = require("../controller/orderController");
 
 
+const storeController = require("../controller/storeController");
+const storeValidation = require("../validation/StoreValidation");
+
 // ADMIN
 router.get("/admin/all", adminController.getAdmins);
 router.post("/admin/create", adminValidation, adminController.createAdmin);
@@ -34,10 +37,20 @@ router.put("/worker/update/:id", workerController.updateWorker);
 // ATTENDANCE => DAVOMAT
 router.get("/attendance/all", attendanceController.getAll);
 router.get("/attendance/date/:date", attendanceController.getByDate);
-router.get("/attendance/monthly/:year/:month", attendanceController.getMonthlyAttendance);
+router.get(
+  "/attendance/monthly/:year/:month",
+  attendanceController.getMonthlyAttendance
+);
 router.post("/attendance/create", attendanceController.create);
 router.put("/attendance/update/:id", attendanceController.update);
 
+// STORE
+router.get("/store/all", storeController.getStore);
+router.post("/store/create", storeValidation, storeController.createStore);
+router.delete("/store/delete/:id", storeController.deleteStore);
+router.put("/store/update/:id", storeController.updateStore);
+router.get("/store/category/:category", storeController.getStoreByCategory);
+router.put("/store/decrement/:id", storeController.decrementQuantity);
 
 // Working Hours
 router.post("/workingHours/create", WorkingHoursController.createWorkingHours);
@@ -45,7 +58,6 @@ router.get("/workingHours/", WorkingHoursController.getAllWorkingHours);
 router.get("/workingHours/:id", WorkingHoursController.getWorkingHoursById);
 router.put("/workingHours/:id", WorkingHoursController.updateWorkingHours);
 router.delete("/workingHours/:id", WorkingHoursController.deleteWorkingHours);
-
 
 // Salaries
 router.post("/salaries", salaryController.createSalary);
