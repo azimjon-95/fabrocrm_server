@@ -9,6 +9,9 @@ const workerValidation = require("../validation/WorkerValidation");
 const salaryController = require("../controller/salaryController");
 const attendanceController = require("../controller/attendanceController");
 const WorkingHoursController = require("../controller/workingHoursController");
+const ExpenseController = require('../controller/expenseController');
+const OrderController = require("../controller/orderController");
+
 
 // ADMIN
 router.get("/admin/all", adminController.getAdmins);
@@ -50,5 +53,24 @@ router.get("/salaries", salaryController.getAllSalaries);
 router.get("/salaries/:id", salaryController.getSalaryById);
 router.put("/salaries/:id", salaryController.updateSalary);
 router.delete("/salaries/:id", salaryController.deleteSalary);
+
+
+
+// Expenses
+router.post('/expenses', ExpenseController.createExpense);
+router.get('/expenses', ExpenseController.getAllExpenses);
+router.get('/expenses/:id', ExpenseController.getExpenseById);
+router.put('/expenses/:id', ExpenseController.updateExpense);
+router.delete('/expenses/:id', ExpenseController.deleteExpense);
+router.post('/expenses/period', ExpenseController.getExpensesByPeriod);
+
+
+//  Orders
+router.get("/order/", OrderController.getOrders);
+router.get("/order/:id", OrderController.getOrderById);
+router.post("/order/", OrderController.createOrder);
+router.put("/order/:id", OrderController.updateOrder);
+router.delete("/order/:id", OrderController.deleteOrder);
+
 
 module.exports = router;
