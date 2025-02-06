@@ -67,7 +67,6 @@ router.put("/salaries/:id", salaryController.updateSalary);
 router.delete("/salaries/:id", salaryController.deleteSalary);
 
 
-
 // Expenses
 router.post('/expenses', ExpenseController.createExpense);
 router.get('/expenses', ExpenseController.getAllExpenses);
@@ -77,7 +76,7 @@ router.delete('/expenses/:id', ExpenseController.deleteExpense);
 router.post('/expenses/period', ExpenseController.getExpensesByPeriod);
 
 
-//  Orders
+// Orders
 router.get("/order/", OrderController.getOrders);
 router.get("/order/:id", OrderController.getOrderById);
 router.post("/order/", OrderController.createOrder);

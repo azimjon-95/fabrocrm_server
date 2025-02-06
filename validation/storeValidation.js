@@ -22,7 +22,6 @@ const storeValidation = (req, res, next) => {
       "quantity",
       "unit",
       "pricePerUnit",
-      "totalPrice",
       "supplier",
     ],
     additionalProperties: false,
