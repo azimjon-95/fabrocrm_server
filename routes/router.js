@@ -51,6 +51,7 @@ router.delete("/store/delete/:id", storeController.deleteStore);
 router.put("/store/update/:id", storeController.updateStore);
 router.get("/store/category/:category", storeController.getStoreByCategory);
 router.put("/store/decrement/:id", storeController.decrementQuantity);
+router.get("/store/history", storeController.getStockHistory);
 
 // Working Hours
 router.post("/workingHours/create", WorkingHoursController.createWorkingHours);
