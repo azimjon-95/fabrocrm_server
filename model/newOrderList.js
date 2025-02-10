@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
 const materialSchema = new mongoose.Schema({
-    productId: { type: String, required: true },
-    name: { type: String, required: true },
-    category: { type: String, required: true },
-    pricePerUnit: { type: Number, required: true },
-    quantity: { type: Number, required: true },
-    unit: { type: String, required: true },
-    supplier: { type: String, required: true }
+    productId: { type: String },
+    name: { type: String },
+    category: { type: String },
+    pricePerUnit: { type: Number },
+    quantity: { type: Number },
+    unit: { type: String },
+    supplier: { type: String }
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
-    totalPrice: { type: Number, required: true, default: 0 },
+    totalPrice: { type: Number, default: 0 },
     materials: [materialSchema],
     isNew: { type: Boolean, default: false },
     sentToAccountant: { type: Boolean, default: false },
@@ -29,3 +29,5 @@ orderSchema.pre('save', function (next) {
 
 const Orderlist = mongoose.model('Neworderlist', orderSchema);
 module.exports = Orderlist;
+
+
