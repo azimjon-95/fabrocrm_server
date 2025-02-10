@@ -1,11 +1,31 @@
 const mongoose = require("mongoose");
 
+// Material Schema
 const MaterialSchema = new mongoose.Schema({
   name: { type: String, required: true },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
+  unit: { type: String, required: true },
 });
 
+// Material Given Schema (Ombordan chiqarilgan materiallar)
+const MaterialGivenSchema = new mongoose.Schema({
+  orderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Order",
+    required: true,
+  }, // Qaysi buyurtmaga tegishli
+  materialName: { type: String, required: true }, // Material nomi
+  givenQuantity: { type: Number, required: true }, // Omborchi bergan miqdor
+  unit: { type: String, required: true },
+  date: { type: Date, default: Date.now }, // Qachon berilganligi
+  materialId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "WarehouseItem", required: true
+  },
+});
+
+// Customer Schema (Mijoz ma'lumotlari)
 const CustomerSchema = new mongoose.Schema({
   type: {
     type: String,
@@ -17,9 +37,17 @@ const CustomerSchema = new mongoose.Schema({
   companyName: { type: String }, // Faqat yuridik shaxslar uchun
   director: { type: String },
   inn: { type: Number },
-  address: { type: String },
 });
 
+// Order Address Schema (Buyurtma manzili)
+const OrderAddressSchema = new mongoose.Schema({
+  region: { type: String, required: true },
+  district: { type: String, required: true },
+  street: { type: String, required: true },
+  location: { type: String, required: true },
+});
+
+// Order Schema (Buyurtma ma'lumotlari)
 const OrderSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -40,10 +68,16 @@ const OrderSchema = new mongoose.Schema(
       required: true,
     },
     materials: [MaterialSchema],
+    address: { type: OrderAddressSchema, required: true },
+    isType: { type: Boolean, default: true },
+
   },
   { timestamps: true }
 );
 
-const Order = mongoose.model("order", OrderSchema);
+// Model yaratish
+const MaterialGiven = mongoose.model("MaterialGiven", MaterialGivenSchema);
+const Order = mongoose.model("Order", OrderSchema);
 
-module.exports = Order;
+// Eksport qilish
+module.exports = { Order, MaterialGiven };

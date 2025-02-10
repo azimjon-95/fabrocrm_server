@@ -11,9 +11,9 @@ const AdminSchema = new mongoose.Schema(
     login: { type: String, required: true, unique: true },
     role: {
       type: String,
-      enum: ["manager", "seller", "director", "accountant"],
+      enum: ["manager", "seller", "director", "accountant", "warehouseman", "deputy_director"],
       default: "director",
-    },
+    }
   },
   { timestamps: true }
 );

@@ -27,7 +27,7 @@ const adminValidation = (req, res, next) => {
       },
       role: {
         type: "string",
-        enum: ["manager", "seller", "director", "accountant"],
+        enum: ["manager", "seller", "director", "accountant", "warehouseman", "deputy_director"],
         default: "director",
       },
     },

@@ -7,7 +7,6 @@ class ExpenseController {
     async createExpense(req, res) {
         try {
             const { name, amount, amountType, description } = req.body;
-            console.log(name, amount, amountType, description);
             const newExpense = new Expense({ name, amount, amountType, description });
             await newExpense.save();
             response.created(res, "Expense created successfully", newExpense);

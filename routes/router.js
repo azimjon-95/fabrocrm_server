@@ -6,6 +6,7 @@ const upload2 = multer();
 const adminController = require("../controller/adminController");
 const adminValidation = require("../validation/AdminValidation");
 const workerController = require("../controller/workerController");
+const OrderService = require('../controller/newOrderList');
 const workerValidation = require("../validation/WorkerValidation");
 const salaryController = require("../controller/salaryController");
 const attendanceController = require("../controller/attendanceController");
@@ -81,5 +82,20 @@ router.get("/order/:id", OrderController.getOrderById);
 router.post("/order/", upload2.single("image"), OrderController.createOrder);
 router.put("/order/:id", OrderController.updateOrder);
 router.delete("/order/:id", OrderController.deleteOrder);
+router.post("/order/giveMaterial", OrderController.giveMaterial);
+router.get("/order/progress/:orderId", OrderController.orderProgress);
+router.get("/order/get-material/:orderId/:materialId", OrderController.getMaterialById);
+router.get("/order/get-all-material/:orderId", OrderController.getAllMaterialById);
+
+
+// New orders list
+router.post('/list', OrderService.createOrder);
+router.get('/list', OrderService.getOrders);
+router.get('/list/:id', OrderService.getOrderById);
+router.put('/list/:id', OrderService.updateOrder);
+router.delete('/list/:id', OrderService.deleteOrder);
+router.delete('/list/:orderId/materials/:materialId', OrderService.deleteMaterialById);
+router.delete('/list/:orderId/materials', OrderService.deleteAllMaterials);
+router.post('/list/:orderId/materials', OrderService.createMaterial);
 
 module.exports = router;

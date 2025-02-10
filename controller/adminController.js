@@ -23,6 +23,7 @@ class adminController {
         .digest("hex");
       req.body.password = `${salt}:${hashpassword}`;
 
+
       const admin = await AdminDB.create(req.body);
       if (!admin) return response.error(res, "Admin qo'shilmadi", admin);
       response.created(res, "Admin yaratildi", admin);
@@ -62,8 +63,6 @@ class adminController {
         token,
       });
     } catch (err) {
-      console.log(err);
-
       response.serverError(res, err.message, err);
     }
   }

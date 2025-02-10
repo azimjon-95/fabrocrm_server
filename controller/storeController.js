@@ -6,8 +6,6 @@ class StoreController {
   async createStore(req, res) {
     try {
       const data = req.body;
-      console.log("Yangi mahsulot qo'shish:", data);
-
       const store = await storeDB.create({
         name: data.name,
         category: data.category,
@@ -43,7 +41,6 @@ class StoreController {
     try {
       const { id } = req.params;
       const data = req.body;
-      console.log(id, "Mahsulot yangilash:", data);
 
       let store = await storeDB.findById(id);
       if (!store) return response.error(res, "Mahsulot topilmadi");
