@@ -53,6 +53,8 @@ router.put("/store/update/:id", storeController.updateStore);
 router.get("/store/category/:category", storeController.getStoreByCategory);
 router.put("/store/decrement/:id", storeController.decrementQuantity);
 router.get("/store/history", storeController.getStockHistory);
+// Ko‘p mahsulotlarni yangilash yoki qo‘shish
+router.post("/store/update-many", storeController.storeUpdateMany);
 
 // Working Hours
 router.post("/workingHours/create", WorkingHoursController.createWorkingHours);
@@ -92,7 +94,7 @@ router.get("/order/get-all-material/:orderId", OrderController.getAllMaterialByI
 router.post('/list', OrderService.createOrder);
 router.get('/list', OrderService.getOrders);
 router.get('/list/:id', OrderService.getOrderById);
-router.put('/list/:id', OrderService.updateOrder);
+router.patch('/list/:id', OrderService.updateOrder);
 router.delete('/list/:id', OrderService.deleteOrder);
 router.delete('/list/:orderId/materials/:materialId', OrderService.deleteMaterialById);
 router.delete('/list/:orderId/materials', OrderService.deleteAllMaterials);

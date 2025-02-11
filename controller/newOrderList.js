@@ -44,13 +44,22 @@ class OrderService {
             return Response.serverError(res, "Failed to retrieve order", error);
         }
     }
-
     static async updateOrder(req, res) {
         try {
-            const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            if (!req.body || Object.keys(req.body).length === 0) {
+                return res.status(400).json({ message: "No update data provided" });
+            }
+
+            const order = await Order.findByIdAndUpdate(
+                req.params.id,
+                { $set: req.body }, // Faqat berilgan maydonlarni yangilash
+                { new: true, runValidators: true }
+            );
+
             if (!order) return Response.notFound(res, "Order not found");
             return Response.success(res, "Order updated successfully", order);
         } catch (error) {
+            console.error("Update Error:", error);
             return Response.serverError(res, "Failed to update order", error);
         }
     }
@@ -90,6 +99,7 @@ class OrderService {
             return Response.serverError(res, "Failed to delete all materials", error);
         }
     }
+
 }
 
 module.exports = OrderService;

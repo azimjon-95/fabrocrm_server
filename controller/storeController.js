@@ -1,5 +1,6 @@
 const storeDB = require("../model/storeModel");
 const response = require("../utils/response");
+const mongoose = require('mongoose')
 const StockUpdateHistory = require("../model/stockUpdateHistory");
 
 class StoreController {
@@ -130,6 +131,101 @@ class StoreController {
       response.serverError(res, err.message, err);
     }
   }
+
+  // 4454
+  async storeUpdateMany(req, res) {
+    try {
+      const updates = req.body; // array keladi
+
+      if (!Array.isArray(updates) || updates.length === 0) {
+        return response.error(res, "Yangilash uchun mahsulotlar yo‘q!");
+      }
+
+      for (const data of updates) {
+        // // productId ni tekshirish
+        // if (!mongoose.Types.ObjectId.isValid(data.productId)) {
+        //   console.log(`❌ Noto‘g‘ri ID formati: ${data.productId}`);
+        // }
+
+        // Mahsulotni bazadan qidirish
+        let store = await storeDB.findById(data.productId);
+
+        if (store) {
+          // 🔄 Agar mahsulot bo‘lsa, quantity ni qo‘shish
+          store.quantity += data.quantity || 0;
+          store.name = data.name || store.name;
+          store.category = data.category || store.category;
+          store.pricePerUnit = data.pricePerUnit || store.pricePerUnit;
+          store.unit = data.unit || store.unit;
+          store.supplier = data.supplier || store.supplier;
+          await store.save();
+        } else {
+          // 🆕 Agar mahsulot yo‘q bo‘lsa, yangisini yaratish
+          console.log(data);
+          await storeDB.create({
+            name: data.name,
+            category: data.category,
+            quantity: data.quantity,
+            pricePerUnit: data.pricePerUnit,
+            unit: data.unit,
+            supplier: data.supplier,
+          });
+        }
+      }
+
+      response.success(res, "Mahsulotlar omborga kirib qo‘shildi!");
+    } catch (err) {
+      response.serverError(res, err.message, err);
+    }
+  }
+
+
+  // async storeUpdateMany(updates) {
+  //   for (const data of updates) {
+  //     // productId ni tekshirish
+  //     if (!mongoose.Types.ObjectId.isValid(data.productId)) {
+  //       console.log(`❌ Noto‘g‘ri ID formati: ${data.productId}`);
+
+  //       // Yangi ObjectId generatsiya qilish
+  //       const newProduct = new Product({
+  //         _id: new mongoose.Types.ObjectId(),
+  //         name: data.name,
+  //         category: data.category,
+  //         pricePerUnit: data.pricePerUnit,
+  //         quantity: data.quantity,
+  //         unit: data.unit,
+  //         supplier: data.supplier,
+  //       });
+
+  //       await newProduct.save();
+  //       console.log(`✅ Yangi mahsulot yaratildi: ${newProduct.name}`);
+  //       continue;
+  //     }
+
+  //     // Mavjud bo‘lsa, quantity ni yangilash
+  //     const existingProduct = await Product.findOne({ _id: data.productId });
+
+  //     if (existingProduct) {
+  //       existingProduct.quantity += data.quantity;
+  //       await existingProduct.save();
+  //       console.log(`🔄 Yangilandi: ${existingProduct.name}, Yangi miqdor: ${existingProduct.quantity}`);
+  //     } else {
+  //       // Agar mavjud bo‘lmasa, yangi mahsulot yaratish
+  //       const newProduct = new Product({
+  //         _id: data.productId, // Valid bo‘lsa oldingi ID ishlatiladi
+  //         name: data.name,
+  //         category: data.category,
+  //         pricePerUnit: data.pricePerUnit,
+  //         quantity: data.quantity,
+  //         unit: data.unit,
+  //         supplier: data.supplier,
+  //       });
+
+  //       await newProduct.save();
+  //       console.log(`✅ Yangi mahsulot yaratildi: ${newProduct.name}`);
+  //     }
+  //   }
+  // }
 }
 
 module.exports = new StoreController();

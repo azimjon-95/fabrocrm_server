@@ -19,7 +19,8 @@ const orderSchema = new mongoose.Schema({
     addedToData: { type: Boolean, default: false },
     isPaid: { type: Boolean, default: false }
 }, {
-    timestamps: { currentTime: () => Date.now() + 5 * 60 * 1000 }
+    timestamps: { currentTime: () => Date.now() + 5 * 60 * 1000 },
+    suppressReservedKeysWarning: true // Ogohlantirishni o'chirish
 });
 
 orderSchema.pre('save', function (next) {
