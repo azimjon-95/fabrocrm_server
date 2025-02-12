@@ -159,6 +159,38 @@ class OrderController {
 
 
   // Buyurtma uchun qancha material sarflanganligini hisoblash
+  // static orderProgress = async (req, res) => {
+  //   try {
+  //     const { orderId } = req.params;
+
+  //     const order = await Order.findById(orderId);
+  //     if (!order) return res.status(404).json({ message: "Buyurtma topilmadi" });
+
+  //     const givenMaterials = await MaterialGiven.find({ orderId });
+  //     console.log(givenMaterials);
+
+  //     let progress = order.materials.map((material) => {
+  //       const totalGiven = givenMaterials
+  //         .filter((g) => g.materialName === material.name)
+  //         .reduce((sum, g) => sum + g.givenQuantity, 0);
+
+  //       const remaining = Math.max(material.quantity - totalGiven, 0);
+  //       const percentage = ((totalGiven / material.quantity) * 100).toFixed(2);
+
+  //       return {
+  //         materialName: material.name,
+  //         required: material.quantity,
+  //         given: totalGiven,
+  //         remaining,
+  //         percentage,
+  //       };
+  //     });
+
+  //     response.success(res, "Materiallar topildi", progress);
+  //   } catch (error) {
+  //     return response.serverError(res, "Server xatosi", error);
+  //   }
+  // };
   static orderProgress = async (req, res) => {
     try {
       const { orderId } = req.params;
@@ -168,25 +200,16 @@ class OrderController {
 
       const givenMaterials = await MaterialGiven.find({ orderId });
 
-      let progress = [];
+      // Umumiy kerak bo'lgan materiallar miqdorini topish
+      const totalRequired = order.materials.reduce((sum, material) => sum + material.quantity, 0);
 
-      order.materials.forEach((material) => {
-        const totalGiven = givenMaterials
-          .filter((g) => g.materialName === material.name)
-          .reduce((sum, g) => sum + g.givenQuantity, 0);
+      // Berilgan materiallarning umumiy miqdorini topish
+      const totalGiven = givenMaterials.reduce((sum, g) => sum + g.givenQuantity, 0);
 
-        const percentage = ((totalGiven / material.quantity) * 100).toFixed(2);
-
-        progress.push({
-          materialName: material.name,
-          required: material.quantity,
-          given: totalGiven,
-          remaining: material.quantity - totalGiven,
-          percentage: `${percentage}%`,
-        });
-      });
-
-      response.success(res, "Materiallar topildi", progress);
+      // Umumiy foiz hisoblash
+      const percentage = totalRequired > 0 ? ((totalGiven / totalRequired) * 100).toFixed(2) : 0;
+      console.log(percentage);
+      response.success(res, "Umumiy materiallar ta'minlanish foizi", { percentage });
     } catch (error) {
       return response.serverError(res, "Server xatosi", error);
     }

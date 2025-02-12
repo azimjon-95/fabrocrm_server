@@ -6,6 +6,7 @@ const MaterialSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
   unit: { type: String, required: true },
+  materialID: { type: mongoose.Schema.Types.ObjectId, ref: "WarehouseItem", required: true },
 });
 
 // Material Given Schema (Ombordan chiqarilgan materiallar)
